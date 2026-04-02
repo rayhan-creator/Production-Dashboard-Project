@@ -9,7 +9,7 @@ import {
 
 import { useAuth } from '../context/AuthContext.jsx';
 import { useTheme } from '../context/ThemeContext.jsx';
-import { useDashboard } from '../hooks/useDashboard.js';
+import { useDashboard } from '../hooks/UseDashboard.js';
 import { useExport } from '../hooks/useExport.js';
 import MetricCard from '../components/MetricCard.jsx';
 import {
