@@ -10,7 +10,7 @@ function ProtectedRoute({ children }) {
   if (loading) return (
     <div style={{ display:'flex', height:'100vh', alignItems:'center', justifyContent:'center', background:'var(--bg-base)' }}>
       <LoadingSpinner size="lg" text="Memuat aplikasi..."/>
-    </div>
+    </div>  
   );
   return isAuthenticated ? children : <Navigate to="/login" replace/>;
 }

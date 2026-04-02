@@ -89,10 +89,10 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <p className="login-note">
+        {/* <p className="login-note">
           💡 Backend: <code>cd backend && npm run dev</code><br/>
           pastikan jalan di <code>localhost:5000</code>
-        </p>
+        </p> */}
       </div>
     </div>
   );
