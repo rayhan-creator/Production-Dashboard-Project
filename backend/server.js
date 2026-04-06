@@ -14,7 +14,10 @@ const PORT = process.env.PORT || 5000;
 
 app.use(helmet({ contentSecurityPolicy: false }));
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  origin: [
+    'http://localhost:5173', // Izin buat frontend lokal lu
+    'https://nama-project-frontend-lu.vercel.app' // GANTI SAMA LINK VERCEL LU ASLI
+  ],
   credentials: true,
   methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
