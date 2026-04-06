@@ -1,4 +1,4 @@
-// pages/LoginPage.jsx
+// pages/LoginPage.jsx — Login via Supabase Auth
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
@@ -21,7 +21,10 @@ export default function LoginPage() {
   const [loading,  setLoading]  = useState(false);
   const [showPass, setShowPass] = useState(false);
 
-  useEffect(() => { if (isAuthenticated) navigate('/dashboard', { replace:true }); }, [isAuthenticated, navigate]);
+  useEffect(() => {
+    if (isAuthenticated) navigate('/dashboard', { replace: true });
+  }, [isAuthenticated, navigate]);
+
   useEffect(() => { clearAuthError(); }, []);
 
   const handleLogin = async (e) => {
@@ -32,7 +35,11 @@ export default function LoginPage() {
     setLoading(false);
   };
 
-  const fillDemo = (acc) => { setUsername(acc.username); setPassword('password123'); clearAuthError(); };
+  const fillDemo = (acc) => {
+    setUsername(acc.username);
+    setPassword('password123');
+    clearAuthError();
+  };
 
   return (
     <div className="login-page">
@@ -40,7 +47,6 @@ export default function LoginPage() {
       <div className="login-bg-glow top"/>
       <div className="login-bg-glow bottom"/>
 
-      {/* Theme toggle di pojok kanan atas */}
       <button className="theme-toggle-corner" onClick={toggleTheme} title="Toggle tema">
         {isDark ? '☀️' : '🌙'}
       </button>
@@ -70,7 +76,9 @@ export default function LoginPage() {
               </button>
             </div>
           </div>
+
           {authError && <div className="login-error"><span>⚠️</span> {authError}</div>}
+
           <button type="submit" className="btn-login" disabled={loading || !username || !password}>
             {loading ? <span className="btn-spinner"/> : '→'}
             {loading ? 'Memverifikasi...' : 'Masuk ke Dashboard'}
@@ -89,10 +97,9 @@ export default function LoginPage() {
           </div>
         </div>
 
-        {/* <p className="login-note">
-          💡 Backend: <code>cd backend && npm run dev</code><br/>
-          pastikan jalan di <code>localhost:5000</code>
-        </p> */}
+        <p className="login-note">
+          💡 Powered by <strong>Supabase</strong> — no backend needed
+        </p>
       </div>
     </div>
   );
