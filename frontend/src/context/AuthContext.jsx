@@ -1,18 +1,18 @@
 // context/AuthContext.jsx — Auth via Supabase (no backend)
 import { createContext, useCallback, useContext, useEffect, useState } from 'react';
-import { supabase, getProfile, PERMISSIONS, ROLE_CONFIG } from '../lib/supabase.js';
+// ✅ FIX: path yang benar adalah '../lib/supabase.js' bukan '../frontend/src/supabase.js'
+import { supabase, getProfile, PERMISSIONS, ROLE_CONFIG } from '../supabase.js';
 
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
-  const [user,      setUser]      = useState(null);    // profile dari DB
-  const [session,   setSession]   = useState(null);    // Supabase session
+  const [user,      setUser]      = useState(null);
+  const [session,   setSession]   = useState(null);
   const [loading,   setLoading]   = useState(true);
   const [authError, setAuthError] = useState(null);
 
   // ── Load session saat app start ──
   useEffect(() => {
-    // Cek session yang tersimpan
     supabase.auth.getSession().then(async ({ data: { session } }) => {
       setSession(session);
       if (session?.user) {
@@ -26,7 +26,6 @@ export function AuthProvider({ children }) {
       setLoading(false);
     });
 
-    // Listen perubahan auth state (login/logout/token refresh)
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       setSession(session);
       if (session?.user) {
@@ -44,25 +43,31 @@ export function AuthProvider({ children }) {
     return () => subscription.unsubscribe();
   }, []);
 
-  // ── Login dengan email (format: username@denso.local) ──
-  // Demo accounts: superadmin@denso.local, admin_plant_a@denso.local, dll
+  // ── Login ──
+  // Username dikonversi ke format email: superadmin → superadmin@denso.local
   const login = useCallback(async (username, password) => {
     setAuthError(null);
     try {
-      // Konversi username → email format Supabase
-      const email = username.includes('@') ? username : `${username.trim().toLowerCase()}@denso.local`;
+      const email = username.includes('@')
+        ? username
+        : `${username.trim().toLowerCase()}@denso.local`;
 
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+
       if (error) {
+        // ✅ FIX: pesan error yang jelas, tidak ada mention "backend" atau "port 5000"
         const msg = error.message === 'Invalid login credentials'
-          ? 'Username atau password salah.'
+          ? 'Username atau password salah. Pastikan SQL schema sudah dijalankan di Supabase.'
+          : error.message === 'Email not confirmed'
+          ? 'Email belum dikonfirmasi. Cek Supabase → Authentication → Users.'
           : error.message;
         setAuthError(msg);
         return { success: false, message: msg };
       }
       return { success: true };
     } catch (err) {
-      const msg = 'Terjadi kesalahan. Coba lagi.';
+      // ✅ FIX: error yang relevan, bukan "konek ke port 5000"
+      const msg = 'Gagal konek ke Supabase. Periksa VITE_SUPABASE_URL dan VITE_SUPABASE_ANON_KEY di .env.local';
       setAuthError(msg);
       return { success: false, message: msg };
     }

@@ -1,6 +1,6 @@
 // hooks/useDashboard.js — Query langsung ke Supabase, no backend
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { supabase, FILTER_OPTIONS } from '../lib/supabase.js';
+import { supabase, FILTER_OPTIONS } from '../supabase.js';
 import { useAuth } from '../context/AuthContext.jsx';
 
 export function useDashboard({ tab, plant, period, shift, line }) {
